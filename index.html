@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,46 +7,61 @@
   <meta name="description" content="ONG dedicada ao resgate e adoção de animais abandonados.">
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
   <header>
-    <div class="logo">
-      <img src="img/logo.png" alt="Logo da ONG Segunda Chance">
+    <div class="header-container">
+      <div class="logo">
+        <img src="img/logo.png" alt="Logo da ONG Segunda Chance">
+      </div>
+      <nav aria-label="Menu principal">
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="projetos.html">Projetos</a></li>
+          <li><a href="cadastro.html">Cadastro</a></li>
+        </ul>
+      </nav>
     </div>
-    <nav aria-label="Menu principal">
-      <ul>
-        <li><a href="index.html">Início</a></li>
-        <li><a href="projetos.html">Projetos</a></li>
-        <li><a href="cadastro.html">Cadastro</a></li>
-      </ul>
-    </nav>
   </header>
 
   <main>
     <section class="hero">
       <h1>Bem-vindo à ONG Segunda Chance</h1>
       <p>Transformando vidas através do resgate e da adoção responsável de animais.</p>
-      <a href="projetos.html" class="btn">Conheça nossos projetos</a>
+      <a href="projetos.html" class="btn btn-primary">Conheça nossos projetos</a>
     </section>
 
     <section class="institucional">
-      <h2>Quem Somos</h2>
+      <div class="section-header">
+        <h2>Quem Somos</h2>
+      </div>
       <p>Somos uma organização sem fins lucrativos que atua no resgate, cuidado e adoção de animais abandonados.</p>
-      <h3>Missão</h3>
-      <p>Promover o bem-estar animal e incentivar a adoção responsável.</p>
-      <h3>Visão</h3>
-      <p>Ser referência nacional em proteção animal e engajamento comunitário.</p>
-      <h3>Valores</h3>
-      <ul>
-        <li>Respeito à vida</li>
-        <li>Transparência</li>
-        <li>Empatia</li>
-        <li>Responsabilidade social</li>
-      </ul>
+      
+      <div class="row">
+        <div class="col-4">
+          <h3>Missão</h3>
+          <p>Promover o bem-estar animal e incentivar a adoção responsável.</p>
+        </div>
+        <div class="col-4">
+          <h3>Visão</h3>
+          <p>Ser referência nacional em proteção animal e engajamento comunitário.</p>
+        </div>
+        <div class="col-4">
+          <h3>Valores</h3>
+          <ul>
+            <li>Respeito à vida</li>
+            <li>Transparência</li>
+            <li>Empatia</li>
+            <li>Responsabilidade social</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <section class="impacto">
-      <h2>Nosso Impacto</h2>
+      <div class="section-header">
+        <h2>Nosso Impacto</h2>
+        <span class="badge badge-success">2024</span>
+      </div>
       <ul>
         <li>🐶 +2.000 animais resgatados</li>
         <li>🏡 +1.500 adoções realizadas</li>
@@ -56,21 +70,28 @@
     </section>
 
     <section class="equipe">
-      <h2>Nossa Equipe</h2>
+      <div class="section-header">
+        <h2>Nossa Equipe</h2>
+      </div>
       <img src="img/equipe.jpg" alt="Equipe da ONG">
       <p>Contamos com profissionais dedicados e voluntários apaixonados pela causa animal.</p>
     </section>
 
     <section class="transparencia">
-      <h2>Relatórios de Transparência</h2>
+      <div class="section-header">
+        <h2>Relatórios de Transparência</h2>
+      </div>
       <p>Acesse nossos documentos públicos e acompanhe a aplicação dos recursos:</p>
       <ul>
         <li><a href="assets/documentos/relatorio2024.pdf" target="_blank">Relatório Anual 2024</a></li>
         <li><a href="assets/documentos/prestacao-contas.pdf" target="_blank">Prestação de Contas</a></li>
       </ul>
     </section>
+
     <section class="contato">
-      <h2>Contato</h2>
+      <div class="section-header">
+        <h2>Contato</h2>
+      </div>
       <address>
         <p>📍 Rua Emiliano Perneta, 288 - Centro - Curitiba/PR</p>
         <p>📞 (41) 9 9857-0289</p>
@@ -85,5 +106,4 @@
 
   <script src="js/script.js"></script>
 </body>
-
 </html>

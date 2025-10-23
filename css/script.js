@@ -1,102 +1,188 @@
 // ====================================
+// MENU HAMBÚRGUER MOBILE
+// ====================================
+document.addEventListener('DOMContentLoaded', function() {
+  // Criar botão hambúrguer se não existir
+  const header = document.querySelector('header');
+  const nav = document.querySelector('nav');
+  
+  if (!document.querySelector('.menu-toggle')) {
+    const menuToggle = document.createElement('button');
+    menuToggle.className = 'menu-toggle';
+    menuToggle.setAttribute('aria-label', 'Toggle menu');
+    menuToggle.innerHTML = '<span></span><span></span><span></span>';
+    
+    // Inserir antes do nav
+    header.insertBefore(menuToggle, nav);
+    
+    // Evento de clique
+    menuToggle.addEventListener('click', function() {
+      this.classList.toggle('active');
+      nav.classList.toggle('active');
+    });
+  }
+  
+  // Fechar menu ao clicar em um link (mobile)
+  const navLinks = document.querySelectorAll('nav a');
+  navLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      const menuToggle = document.querySelector('.menu-toggle');
+      const nav = document.querySelector('nav');
+      if (menuToggle && menuToggle.classList.contains('active')) {
+        menuToggle.classList.remove('active');
+        nav.classList.remove('active');
+      }
+    });
+  });
+});
+
+// ====================================
 // VALIDAÇÃO DO FORMULÁRIO DE CADASTRO
 // ====================================
 if (document.querySelector("#formCadastro")) {
   const form = document.querySelector("#formCadastro");
   
+  // Validação em tempo real
+  const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+  inputs.forEach(input => {
+    input.addEventListener('blur', function() {
+      validateField(this);
+    });
+    
+    input.addEventListener('input', function() {
+      if (this.classList.contains('invalid')) {
+        validateField(this);
+      }
+    });
+  });
+  
   form.addEventListener("submit", function(event) {
     event.preventDefault();
     
-    // Validação de campos
-    const nome = document.querySelector("#nome").value.trim();
-    const email = document.querySelector("#email").value.trim();
-    const telefone = document.querySelector("#telefone").value.trim();
-    const cpf = document.querySelector("#cpf").value.trim();
-    const area = document.querySelector("#area").value;
-    const motivacao = document.querySelector("#motivacao").value.trim();
-    const termos = document.querySelector("#termos").checked;
+    let isValid = true;
     
-    // Verificar se pelo menos um dia foi selecionado
+    // Validar todos os campos
+    inputs.forEach(input => {
+      if (!validateField(input)) {
+        isValid = false;
+      }
+    });
+    
+    // Verificar disponibilidade
     const disponibilidade = document.querySelectorAll("input[name='disponibilidade']:checked");
-    
-    // Verificar se um período foi selecionado
-    const periodo = document.querySelector("input[name='periodo']:checked");
-    
-    // Validações específicas
-    if (nome.length < 3) {
-      alert("Por favor, digite seu nome completo.");
-      return;
-    }
-    
-    if (!validarEmail(email)) {
-      alert("Por favor, digite um e-mail válido.");
-      return;
-    }
-    
-    if (!validarTelefone(telefone)) {
-      alert("Por favor, digite um telefone válido no formato (00) 00000-0000.");
-      return;
-    }
-    
-    if (!validarCPF(cpf)) {
-      alert("Por favor, digite um CPF válido.");
-      return;
-    }
-    
-    if (area === "") {
-      alert("Por favor, selecione uma área de interesse.");
-      return;
-    }
-    
     if (disponibilidade.length === 0) {
-      alert("Por favor, selecione pelo menos um dia de disponibilidade.");
-      return;
+      showAlert("Por favor, selecione pelo menos um dia de disponibilidade.", "error");
+      isValid = false;
     }
     
+    // Verificar período
+    const periodo = document.querySelector("input[name='periodo']:checked");
     if (!periodo) {
-      alert("Por favor, selecione um período preferencial.");
-      return;
+      showAlert("Por favor, selecione um período preferencial.", "error");
+      isValid = false;
     }
     
-    if (motivacao.length < 10) {
-      alert("Por favor, conte-nos um pouco mais sobre sua motivação (mínimo 10 caracteres).");
-      return;
+    // Verificar termos
+    const termos = document.querySelector("#termos");
+    if (termos && !termos.checked) {
+      showAlert("Você precisa aceitar os termos e condições.", "error");
+      isValid = false;
     }
     
-    if (!termos) {
-      alert("Você precisa aceitar os termos e condições para continuar.");
-      return;
+    if (isValid) {
+      showAlert("Cadastro realizado com sucesso! Entraremos em contato em breve.", "success");
+      setTimeout(() => {
+        form.reset();
+        // Remover classes de validação
+        inputs.forEach(input => {
+          input.classList.remove('valid', 'invalid');
+        });
+      }, 2000);
     }
-    
-    // Se passou em todas as validações
-    alert("Cadastro realizado com sucesso! Entraremos em contato em breve.");
-    form.reset();
   });
   
   // Máscaras para os campos
-  document.querySelector("#telefone").addEventListener("input", function(e) {
-    let valor = e.target.value.replace(/\D/g, "");
-    if (valor.length <= 11) {
-      valor = valor.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
-    }
-    e.target.value = valor;
-  });
+  const telefoneInput = document.querySelector("#telefone");
+  if (telefoneInput) {
+    telefoneInput.addEventListener("input", function(e) {
+      let valor = e.target.value.replace(/\D/g, "");
+      if (valor.length <= 11) {
+        valor = valor.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+      }
+      e.target.value = valor;
+    });
+  }
   
-  document.querySelector("#cpf").addEventListener("input", function(e) {
-    let valor = e.target.value.replace(/\D/g, "");
-    if (valor.length <= 11) {
-      valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-    }
-    e.target.value = valor;
-  });
+  const cpfInput = document.querySelector("#cpf");
+  if (cpfInput) {
+    cpfInput.addEventListener("input", function(e) {
+      let valor = e.target.value.replace(/\D/g, "");
+      if (valor.length <= 11) {
+        valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+      }
+      e.target.value = valor;
+    });
+  }
   
-  document.querySelector("#cep").addEventListener("input", function(e) {
-    let valor = e.target.value.replace(/\D/g, "");
-    if (valor.length <= 8) {
-      valor = valor.replace(/(\d{5})(\d{3})/, "$1-$2");
-    }
-    e.target.value = valor;
-  });
+  const cepInput = document.querySelector("#cep");
+  if (cepInput) {
+    cepInput.addEventListener("input", function(e) {
+      let valor = e.target.value.replace(/\D/g, "");
+      if (valor.length <= 8) {
+        valor = valor.replace(/(\d{5})(\d{3})/, "$1-$2");
+      }
+      e.target.value = valor;
+    });
+  }
+}
+
+// Função de validação de campo
+function validateField(field) {
+  const value = field.value.trim();
+  let isValid = true;
+  let errorMsg = "";
+  
+  // Remover mensagem de erro anterior
+  const existingError = field.parentElement.querySelector('.error-message');
+  if (existingError) {
+    existingError.remove();
+  }
+  
+  if (field.hasAttribute('required') && value === "") {
+    isValid = false;
+    errorMsg = "Este campo é obrigatório.";
+  } else if (field.type === "email" && !validarEmail(value)) {
+    isValid = false;
+    errorMsg = "Por favor, digite um e-mail válido.";
+  } else if (field.id === "telefone" && !validarTelefone(value)) {
+    isValid = false;
+    errorMsg = "Telefone inválido. Use o formato (00) 00000-0000.";
+  } else if (field.id === "cpf" && !validarCPF(value)) {
+    isValid = false;
+    errorMsg = "CPF inválido.";
+  } else if (field.id === "nome" && value.length < 3) {
+    isValid = false;
+    errorMsg = "Nome deve ter pelo menos 3 caracteres.";
+  } else if (field.tagName === "TEXTAREA" && value.length < 10) {
+    isValid = false;
+    errorMsg = "Por favor, forneça mais detalhes (mínimo 10 caracteres).";
+  }
+  
+  if (isValid) {
+    field.classList.remove('invalid');
+    field.classList.add('valid');
+  } else {
+    field.classList.remove('valid');
+    field.classList.add('invalid');
+    
+    // Adicionar mensagem de erro
+    const errorElement = document.createElement('span');
+    errorElement.className = 'error-message';
+    errorElement.textContent = errorMsg;
+    field.parentElement.appendChild(errorElement);
+  }
+  
+  return isValid;
 }
 
 // Funções auxiliares de validação
@@ -114,10 +200,8 @@ function validarCPF(cpf) {
   cpf = cpf.replace(/\D/g, "");
   if (cpf.length !== 11) return false;
   
-  // Verifica se todos os dígitos são iguais
   if (/^(\d)\1+$/.test(cpf)) return false;
   
-  // Validação dos dígitos verificadores
   let soma = 0;
   let resto;
   
@@ -141,114 +225,155 @@ function validarCPF(cpf) {
   return true;
 }
 
-// ====================================
-// INTERAÇÕES DA PÁGINA INICIAL (index.html)
-// ====================================
-if (document.querySelector(".hero")) {
-  const heroSection = document.querySelector(".hero");
-  const btnHero = document.querySelector(".hero .btn");
-  
-  // Animação suave ao rolar para seções
-  const links = document.querySelectorAll("a[href^='#']");
-  links.forEach(link => {
-    link.addEventListener("click", function(e) {
-      e.preventDefault();
-      const targetId = this.getAttribute("href").substring(1);
-      const targetSection = document.getElementById(targetId);
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  });
-  
-  // Contador de impacto animado
-  const impactoItems = document.querySelectorAll(".impacto li");
-  if (impactoItems.length > 0) {
-    const observerOptions = {
-      threshold: 0.5
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = "0";
-          entry.target.style.transform = "translateY(20px)";
-          
-          setTimeout(() => {
-            entry.target.style.transition = "all 0.6s ease";
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
-          }, 100);
-        }
-      });
-    }, observerOptions);
-    
-    impactoItems.forEach(item => observer.observe(item));
+// Sistema de alertas
+function showAlert(message, type = "info") {
+  // Remover alerta anterior se existir
+  const existingAlert = document.querySelector('.alert');
+  if (existingAlert) {
+    existingAlert.remove();
   }
   
-  // Destaque nos links de relatórios
-  const relatoriosLinks = document.querySelectorAll(".transparencia a");
-  relatoriosLinks.forEach(link => {
-    link.addEventListener("mouseenter", function() {
-      this.style.color = "#ff6600";
-      this.style.fontWeight = "bold";
-    });
+  const alert = document.createElement('div');
+  alert.className = `alert alert-${type}`;
+  alert.innerHTML = `
+    <strong>${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</strong>
+    <span>${message}</span>
+  `;
+  
+  const form = document.querySelector('form');
+  if (form) {
+    form.insertBefore(alert, form.firstChild);
     
-    link.addEventListener("mouseleave", function() {
-      this.style.color = "";
-      this.style.fontWeight = "";
-    });
-  });
+    // Remover após 5 segundos
+    setTimeout(() => {
+      alert.style.opacity = '0';
+      alert.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => alert.remove(), 300);
+    }, 5000);
+  }
 }
 
 // ====================================
-// INTERAÇÕES DA PÁGINA DE PROJETOS (projetos.html)
+// INTERAÇÕES DA PÁGINA INICIAL
 // ====================================
-if (document.querySelector("main h1") && window.location.pathname.includes("projetos.html")) {
+if (document.querySelector(".hero")) {
+  // Animação suave ao rolar
+  const sections = document.querySelectorAll("section");
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "0";
+        entry.target.style.transform = "translateY(20px)";
+        
+        setTimeout(() => {
+          entry.target.style.transition = "all 0.6s ease";
+          entry.target.style.opacity = "1";
+          entry.target.style.transform = "translateY(0)";
+        }, 100);
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  sections.forEach(section => observer.observe(section));
+  
+  // Contador animado para números de impacto
+  const impactoItems = document.querySelectorAll(".impacto li");
+  impactoItems.forEach(item => {
+    const text = item.textContent;
+    const match = text.match(/\+?(\d+\.?\d*)/);
+    
+    if (match) {
+      const targetNumber = parseFloat(match[1].replace('.', ''));
+      const prefix = text.split(match[0])[0];
+      const suffix = text.split(match[0])[1];
+      
+      const observerCounter = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounter(item, 0, targetNumber, 2000, prefix, suffix);
+            observerCounter.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      observerCounter.observe(item);
+    }
+  });
+}
+
+function animateCounter(element, start, end, duration, prefix = "", suffix = "") {
+  const startTime = performance.now();
+  
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    const current = Math.floor(start + (end - start) * progress);
+    const formattedNumber = current >= 1000 ? current.toLocaleString('pt-BR') : current;
+    element.textContent = `${prefix}+${formattedNumber}${suffix}`;
+    
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+  
+  requestAnimationFrame(update);
+}
+
+// ====================================
+// INTERAÇÕES DA PÁGINA DE PROJETOS
+// ====================================
+if (window.location.pathname.includes("projetos.html")) {
   const projetosTitle = document.querySelector("main h1");
   
-  // Efeito hover no título
-  projetosTitle.addEventListener("mouseover", function() {
-    this.style.color = "#ff6600";
-    this.style.transition = "color 0.3s ease";
-  });
-  
-  projetosTitle.addEventListener("mouseout", function() {
-    this.style.color = "#2c3e50";
-  });
-  
-  // Animação nos botões de doação
-  const botoesDoacao = document.querySelectorAll("section .btn");
-  botoesDoacao.forEach(botao => {
-    botao.addEventListener("mouseenter", function() {
-      this.style.transform = "scale(1.05)";
-      this.style.transition = "transform 0.3s ease";
+  if (projetosTitle) {
+    projetosTitle.addEventListener("mouseover", function() {
+      this.style.color = "var(--primary-main)";
+      this.style.transition = "color 0.3s ease";
     });
     
-    botao.addEventListener("mouseleave", function() {
-      this.style.transform = "scale(1)";
+    projetosTitle.addEventListener("mouseout", function() {
+      this.style.color = "var(--secondary-main)";
     });
-  });
+  }
   
   // Confirmação ao clicar em doar
   const linksDoacao = document.querySelectorAll("a[href*='pagseguro'], a[href*='paypal']");
   linksDoacao.forEach(link => {
     link.addEventListener("click", function(e) {
-      const confirmacao = confirm("Você será redirecionado para a plataforma de doação. Deseja continuar?");
-      if (!confirmacao) {
-        e.preventDefault();
-      }
+      e.preventDefault();
+      
+      // Criar modal de confirmação
+      const modal = document.createElement('div');
+      modal.className = 'modal active';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <h2>Confirmar Doação</h2>
+          <p>Você será redirecionado para a plataforma de doação. Deseja continuar?</p>
+          <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+            <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">Cancelar</button>
+            <button class="btn btn-primary" onclick="window.open('${this.href}', '_blank'); this.closest('.modal').remove();">Continuar</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      
+      // Fechar modal ao clicar fora
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
     });
   });
   
-  // Imagem com efeito de zoom
+  // Animação nas imagens
   const imagens = document.querySelectorAll("section img");
   imagens.forEach(img => {
-    img.style.transition = "transform 0.3s ease";
-    
     img.addEventListener("mouseenter", function() {
       this.style.transform = "scale(1.03)";
-      this.style.cursor = "pointer";
+      this.style.transition = "transform 0.3s ease";
     });
     
     img.addEventListener("mouseleave", function() {
@@ -258,7 +383,7 @@ if (document.querySelector("main h1") && window.location.pathname.includes("proj
 }
 
 // ====================================
-// INTERAÇÕES GLOBAIS (todas as páginas)
+// INTERAÇÕES GLOBAIS
 // ====================================
 
 // Destaque do menu ativo
@@ -267,55 +392,45 @@ const menuLinks = document.querySelectorAll("nav a");
 
 menuLinks.forEach(link => {
   if (link.getAttribute("href") === currentPage) {
-    link.style.borderBottom = "3px solid #ff6600";
+    link.style.borderBottom = "3px solid var(--primary-main)";
     link.style.paddingBottom = "5px";
   }
-  
-  // Efeito hover nos links do menu
-  link.addEventListener("mouseenter", function() {
-    if (this.getAttribute("href") !== currentPage) {
-      this.style.color = "#ff6600";
-    }
-  });
-  
-  link.addEventListener("mouseleave", function() {
-    if (this.getAttribute("href") !== currentPage) {
-      this.style.color = "white";
-    }
-  });
 });
 
-// Scroll suave para o topo
+// Botão voltar ao topo
+let btnTopo = null;
+
 window.addEventListener("scroll", function() {
   if (window.scrollY > 300) {
-    if (!document.querySelector("#btnTopo")) {
-      const btnTopo = document.createElement("button");
+    if (!btnTopo) {
+      btnTopo = document.createElement("button");
       btnTopo.id = "btnTopo";
       btnTopo.innerHTML = "↑";
+      btnTopo.setAttribute('aria-label', 'Voltar ao topo');
       btnTopo.style.cssText = `
         position: fixed;
         bottom: 30px;
         right: 30px;
-        background-color: #ff6600;
-        color: white;
+        background-color: var(--primary-main);
+        color: var(--neutral-white);
         border: none;
         border-radius: 50%;
         width: 50px;
         height: 50px;
         font-size: 24px;
         cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        box-shadow: var(--shadow-lg);
         z-index: 1000;
-        transition: all 0.3s ease;
+        transition: all var(--transition-base);
       `;
       
       btnTopo.addEventListener("mouseenter", function() {
-        this.style.backgroundColor = "#cc5200";
+        this.style.backgroundColor = "var(--primary-dark)";
         this.style.transform = "scale(1.1)";
       });
       
       btnTopo.addEventListener("mouseleave", function() {
-        this.style.backgroundColor = "#ff6600";
+        this.style.backgroundColor = "var(--primary-main)";
         this.style.transform = "scale(1)";
       });
       
@@ -326,32 +441,56 @@ window.addEventListener("scroll", function() {
       document.body.appendChild(btnTopo);
     }
   } else {
-    const btnTopo = document.querySelector("#btnTopo");
     if (btnTopo) {
       btnTopo.remove();
+      btnTopo = null;
     }
   }
 });
 
-// Mensagem de boas-vindas (apenas na primeira visita)
-if (!sessionStorage.getItem("visitou")) {
-  setTimeout(() => {
-    if (window.location.pathname.includes("index.html") || window.location.pathname === "/") {
-      console.log("Bem-vindo à ONG Segunda Chance! 🐾");
-      sessionStorage.setItem("visitou", "true");
+// Smooth scroll para links internos
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, 1000);
-}
+  });
+});
 
 // Animação no footer
 const footer = document.querySelector("footer");
 if (footer) {
   footer.addEventListener("mouseenter", function() {
-    this.style.backgroundColor = "#1a252f";
-    this.style.transition = "background-color 0.3s ease";
+    this.style.backgroundColor = "var(--secondary-dark)";
+    this.style.transition = "background-color var(--transition-base)";
   });
   
   footer.addEventListener("mouseleave", function() {
-    this.style.backgroundColor = "";
+    this.style.backgroundColor = "var(--secondary-main)";
   });
 }
+
+// Lazy loading para imagens
+if ('IntersectionObserver' in window) {
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+          img.style.opacity = '1';
+        }, 100);
+        observer.unobserve(img);
+      }
+    });
+  });
+  
+  document.querySelectorAll('img').forEach(img => imageObserver.observe(img));
+}
+
+// Log de boas-vindas
+console.log('%c🐾 Bem-vindo à ONG Segunda Chance! 🐾', 'color: #ff6600; font-size: 20px; font-weight: bold;');
+console.log('%cObrigado por visitar nosso site!', 'color: #2c3e50; font-size: 14px;');
