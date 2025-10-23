@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Voluntário</title>
+  <title>Cadastro de Voluntários - ONG Segunda Chance</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>
-    <nav>
+    <div class="logo">
+      <img src="img/logo.png" alt="Logo da ONG Segunda Chance">
+    </div>
+    <nav aria-label="Menu principal">
       <ul>
         <li><a href="index.html">Início</a></li>
         <li><a href="projetos.html">Projetos</a></li>
@@ -16,51 +19,128 @@
       </ul>
     </nav>
   </header>
-
   <main>
     <section>
-      <h1>Cadastro de Voluntário</h1>
-      <form>
+      <h1>Cadastro de Voluntários</h1>
+      <p>Preencha o formulário abaixo e faça parte da nossa equipe de voluntários!</p>
+      
+      <form id="formCadastro" method="post" action="#">
         <fieldset>
-          <legend>Informações Pessoais</legend>
-
-          <label for="nome">Nome Completo:</label>
-          <input type="text" id="nome" name="nome" required>
-
-          <label for="email">E-mail:</label>
-          <input type="email" id="email" name="email" required>
-
-          <label for="cpf">CPF:</label>
-          <input type="text" id="cpf" name="cpf" required>
-
-          <label for="telefone">Telefone:</label>
-          <input type="tel" id="telefone" name="telefone" required>
-
-          <label for="nascimento">Data de Nascimento:</label>
-          <input type="date" id="nascimento" name="nascimento" required>
-
-          <label for="endereco">Endereço:</label>
-          <input type="text" id="endereco" name="endereco" required>
-
-          <label for="cep">CEP:</label>
-          <input type="text" id="cep" name="cep" required>
-
-          <label for="cidade">Cidade:</label>
-          <input type="text" id="cidade" name="cidade" required>
-
-          <label for="estado">Estado:</label>
-          <input type="text" id="estado" name="estado" required>
-
-          <button type="submit" class="btn">Enviar Cadastro</button>
+          <legend>Dados Pessoais</legend>
+          
+          <label for="nome">Nome completo: *</label>
+          <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+          
+          <label for="email">E-mail: *</label>
+          <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com">
+          
+          <label for="telefone">Telefone: *</label>
+          <input type="tel" id="telefone" name="telefone" required placeholder="(00) 00000-0000">
+          
+          <label for="dataNascimento">Data de Nascimento: *</label>
+          <input type="date" id="dataNascimento" name="dataNascimento" required>
+          
+          <label for="cpf">CPF: *</label>
+          <input type="text" id="cpf" name="cpf" required placeholder="000.000.000-00">
         </fieldset>
+
+        <fieldset>
+          <legend>Endereço</legend>
+          
+          <label for="cep">CEP: *</label>
+          <input type="text" id="cep" name="cep" required placeholder="00000-000">
+          
+          <label for="cidade">Cidade: *</label>
+          <input type="text" id="cidade" name="cidade" required>
+          
+          <label for="estado">Estado: *</label>
+          <select id="estado" name="estado" required>
+            <option value="">Selecione</option>
+            <option value="PR">Paraná</option>
+            <option value="SP">São Paulo</option>
+            <option value="RJ">Rio de Janeiro</option>
+            <option value="MG">Minas Gerais</option>
+            <option value="RS">Rio Grande do Sul</option>
+            <option value="SC">Santa Catarina</option>
+            <!-- Adicione outros estados conforme necessário -->
+          </select>
+        </fieldset>
+
+        <fieldset>
+          <legend>Informações de Voluntariado</legend>
+          
+          <label for="area">Área de interesse: *</label>
+          <select id="area" name="area" required>
+            <option value="">Selecione uma área</option>
+            <option value="resgate">Resgate de Animais</option>
+            <option value="cuidados">Cuidados Veterinários</option>
+            <option value="adocao">Feiras de Adoção</option>
+            <option value="eventos">Organização de Eventos</option>
+            <option value="comunicacao">Comunicação e Marketing</option>
+            <option value="administrativo">Administrativo</option>
+          </select>
+          
+          <label for="disponibilidade">Disponibilidade: *</label>
+          <div>
+            <input type="checkbox" id="segunda" name="disponibilidade" value="segunda">
+            <label for="segunda">Segunda-feira</label><br>
+            
+            <input type="checkbox" id="terca" name="disponibilidade" value="terca">
+            <label for="terca">Terça-feira</label><br>
+            
+            <input type="checkbox" id="quarta" name="disponibilidade" value="quarta">
+            <label for="quarta">Quarta-feira</label><br>
+            
+            <input type="checkbox" id="quinta" name="disponibilidade" value="quinta">
+            <label for="quinta">Quinta-feira</label><br>
+            
+            <input type="checkbox" id="sexta" name="disponibilidade" value="sexta">
+            <label for="sexta">Sexta-feira</label><br>
+            
+            <input type="checkbox" id="sabado" name="disponibilidade" value="sabado">
+            <label for="sabado">Sábado</label><br>
+            
+            <input type="checkbox" id="domingo" name="disponibilidade" value="domingo">
+            <label for="domingo">Domingo</label>
+          </div>
+          
+          <label for="periodo">Período preferencial: *</label>
+          <div>
+            <input type="radio" id="manha" name="periodo" value="manha" required>
+            <label for="manha">Manhã</label><br>
+            
+            <input type="radio" id="tarde" name="periodo" value="tarde">
+            <label for="tarde">Tarde</label><br>
+            
+            <input type="radio" id="noite" name="periodo" value="noite">
+            <label for="noite">Noite</label>
+          </div>
+          
+          <label for="experiencia">Experiência prévia com animais:</label>
+          <textarea id="experiencia" name="experiencia" rows="4" placeholder="Conte-nos sobre sua experiência com animais"></textarea>
+          
+          <label for="motivacao">Por que deseja ser voluntário? *</label>
+          <textarea id="motivacao" name="motivacao" rows="4" required placeholder="Compartilhe sua motivação"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Termos e Condições</legend>
+          
+          <input type="checkbox" id="termos" name="termos" required>
+          <label for="termos">Aceito os termos e condições da ONG *</label><br>
+          
+          <input type="checkbox" id="newsletter" name="newsletter">
+          <label for="newsletter">Desejo receber novidades por e-mail</label>
+        </fieldset>
+
+        <button type="submit" class="btn">Enviar Cadastro</button>
+        <button type="reset" class="btn" style="background-color: #95a5a6;">Limpar Formulário</button>
       </form>
     </section>
   </main>
-
   <footer>
-    <p>&copy; 2025 - ONG Segunda Chance</p>
+    <p>&copy; 2025 - ONG Segunda Chance. Todos os direitos reservados.</p>
   </footer>
-
   <script src="js/script.js"></script>
 </body>
 </html>
