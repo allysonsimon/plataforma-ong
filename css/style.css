@@ -1,3 +1,14 @@
+/* Ajuste do tamanho da logo */
+.logo {
+  width: auto; /* Defina a largura desejada */
+  height: auto; /* Mantém a proporção da imagem */
+}
+
+.logo img {
+  max-width: auto; /* Ajuste conforme necessário */
+  height: auto;
+}
+
 /* Reset básico */
 * {
   margin: 0;
@@ -110,6 +121,3 @@ label {
   font-weight: bold;
 }
 
-input {
-  width: 100%;
-  padding
